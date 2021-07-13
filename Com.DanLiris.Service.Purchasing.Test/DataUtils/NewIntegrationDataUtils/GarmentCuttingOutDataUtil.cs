@@ -64,9 +64,30 @@ namespace Com.DanLiris.Service.Purchasing.Test.DataUtils.NewIntegrationDataUtils
             return result;
         }
 
+        public Dictionary<string, object> GetNullFormatterOk()
+        {
+            //List<GarmentExpenditureGoodViewModel> garmentExpenditureGoods = new List<GarmentExpenditureGoodViewModel>();
+            //garmentExpenditureGoods.Add(GetNewData());
+            //garmentExpenditureGoods.Add(GetNewData());
+            //var data = new List<GarmentExpenditureGoodViewModel> { GetNewData() };
+
+            Dictionary<string, object> result =
+                new ResultFormatter("1.0", General.OK_STATUS_CODE, General.OK_MESSAGE)
+                .Ok(null);
+
+            return result;
+        }
+
         public string GetMultipleResultFormatterOkString()
         {
             var result = GetMultipleResultFormatterOk();
+
+            return JsonConvert.SerializeObject(result);
+        }
+
+        public string GetNullFormatterOkString()
+        {
+            var result = GetNullFormatterOk();
 
             return JsonConvert.SerializeObject(result);
         }

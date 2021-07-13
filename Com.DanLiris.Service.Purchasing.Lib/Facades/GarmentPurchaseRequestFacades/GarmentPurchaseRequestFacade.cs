@@ -96,6 +96,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFaca
                 Id = s.Id,
                 UId = s.UId,
                 RONo = s.RONo,
+                MDStaff = s.MDStaff,
                 PRNo = s.PRNo,
                 Article = s.Article,
                 Date = s.Date,

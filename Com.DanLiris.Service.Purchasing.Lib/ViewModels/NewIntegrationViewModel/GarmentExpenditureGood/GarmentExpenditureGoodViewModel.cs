@@ -22,6 +22,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.ViewModels.NewIntegrationViewModel
         public string ExpenditureType { get; set; }
         public string Article { get; set; }
         public double TotalQuantity { get; set; }
+        public double TotalPrice { get; set; }
     }
 
     public class GarmentComodity

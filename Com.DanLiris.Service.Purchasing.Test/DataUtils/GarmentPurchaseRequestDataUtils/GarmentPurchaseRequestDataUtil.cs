@@ -27,7 +27,7 @@ namespace Com.DanLiris.Service.Purchasing.Test.DataUtils.GarmentPurchaseRequestD
             return new GarmentPurchaseRequest
             {
                 RONo = $"RO{nowTicksA}",
-
+                MDStaff = $"MDStaff{nowTicksA}",
                 BuyerId = "1",
                 BuyerCode = $"BuyerCode{nowTicksA}",
                 BuyerName = $"BuyerName{nowTicksA}",
@@ -131,6 +131,7 @@ namespace Com.DanLiris.Service.Purchasing.Test.DataUtils.GarmentPurchaseRequestD
                 PRNo = data.PRNo,
                 PRType = data.PRType,
                 RONo = data.RONo,
+                MDStaff = data.MDStaff,
                 SCId = data.SCId,
                 SCNo = data.SCNo,
                 BuyerId = data.BuyerId,

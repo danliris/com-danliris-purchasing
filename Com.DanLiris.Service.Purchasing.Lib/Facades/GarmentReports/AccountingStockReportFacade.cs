@@ -78,10 +78,14 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentReports
 
             var BalanceStock = (from a in dbContext.GarmentStockOpnames
                                 join b in dbContext.GarmentStockOpnameItems on a.Id equals b.GarmentStockOpnameId
+                                join c in dbContext.GarmentDOItems on b.DOItemId equals c.Id
                                 join g in (from gg in dbContext.GarmentPurchaseRequests where gg.IsDeleted == false select gg) on b.RO equals g.RONo
                                 join d in dbContext.GarmentUnitReceiptNoteItems on b.URNItemId equals d.Id
+                                join f in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on b.EPOItemId equals f.Id
+                                join h in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on f.GarmentEPOId equals h.Id
                                 where a.IsDeleted == false && b.IsDeleted == false
                                 && a.Date.Date == lastdate.Date
+                                && c.CreatedUtc.Year <= DateTo.Date.Year
                                 && a.UnitCode == (string.IsNullOrWhiteSpace(unitcode) ? a.UnitCode : unitcode)
                                 && categories1.Contains(b.ProductName)
                                 select new AccountingStockTempViewModel
@@ -91,7 +95,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentReports
                                     RO = b.RO,
                                     Buyer = g.BuyerCode,
                                     PlanPo = b.POSerialNumber,
-                                    NoArticle = g.Article,
+                                    NoArticle = g.Article.TrimEnd(),
                                     BeginningBalanceQty = b.Quantity,
                                     BeginningBalanceUom = b.SmallUomUnit,
                                     BeginningBalancePrice = Math.Round(((decimal.ToDouble(d.PricePerDealUnit) / (d.Conversion == 0 ? 1 : decimal.ToDouble(d.Conversion))) * d.DOCurrencyRate) * decimal.ToDouble(b.Quantity), 2),
@@ -259,7 +263,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentReports
                                 RO = a.RONo,
                                 Buyer = e.BuyerCode,
                                 PlanPo = a.POSerialNumber,
-                                NoArticle = e.Article,
+                                NoArticle = e.Article.TrimEnd(),
                                 BeginningBalanceQty = Math.Round(a.ReceiptQuantity * a.Conversion, 2),
                                 BeginningBalanceUom = a.SmallUomUnit,
                                 BeginningBalancePrice = Math.Round(((decimal.ToDouble(a.PricePerDealUnit) / (a.Conversion == 0 ? 1 : decimal.ToDouble(a.Conversion))) * a.DOCurrencyRate) * (decimal.ToDouble(a.ReceiptQuantity) * decimal.ToDouble(a.Conversion)), 2),
@@ -368,7 +372,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentReports
                                 RO = a.RONo,
                                 Buyer = a.BuyerCode,
                                 PlanPo = a.POSerialNumber,
-                                NoArticle = e.Article,
+                                NoArticle = e.Article.TrimEnd(),
                                 BeginningBalanceQty = Convert.ToDecimal(a.Quantity * -1),
                                 BeginningBalanceUom = a.UomUnit,
                                 BeginningBalancePrice = Math.Round(a.Quantity * ((double)a.BasicPrice / (a.Conversion == 0 ? 1 : (double)a.Conversion)), 2) * -1,
@@ -478,7 +482,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentReports
                                  RO = b.RONo,
                                  Buyer = f.BuyerCode,
                                  PlanPo = b.POSerialNumber,
-                                 NoArticle = f.Article,
+                                 NoArticle = f.Article.TrimEnd(),
                                  BeginningBalanceQty = Math.Round((decimal)e.SmallQuantity, 2),
                                  BeginningBalanceUom = b.SmallUomUnit,
                                  BeginningBalancePrice = Math.Round(((e.PricePerDealUnit / (e.Conversion == 0 ? 1 : e.Conversion)) * b.DOCurrencyRate) * (e.SmallQuantity), 2),
@@ -637,7 +641,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentReports
                             RO = a.RONo,
                             Buyer = e.BuyerCode,
                             PlanPo = a.POSerialNumber,
-                            NoArticle = e.Article,
+                            NoArticle = e.Article.TrimEnd(),
                             BeginningBalanceQty = 0,
                             BeginningBalanceUom = a.SmallUomUnit,
                             BeginningBalancePrice = 0,
@@ -745,7 +749,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentReports
                              RO = a.RONo,
                              Buyer = a.BuyerCode,
                              PlanPo = a.POSerialNumber,
-                             NoArticle = e.Article,
+                             NoArticle = e.Article.TrimEnd(),
                              BeginningBalanceQty = 0,
                              BeginningBalanceUom = a.UomUnit,
                              BeginningBalancePrice = 0,
@@ -855,7 +859,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentReports
                                RO = b.RONo,
                                Buyer = f.BuyerCode,
                                PlanPo = b.POSerialNumber,
-                               NoArticle = f.Article,
+                               NoArticle = f.Article.TrimEnd(),
                                BeginningBalanceQty = 0,
                                BeginningBalanceUom = b.SmallUomUnit,
                                BeginningBalancePrice = 0,

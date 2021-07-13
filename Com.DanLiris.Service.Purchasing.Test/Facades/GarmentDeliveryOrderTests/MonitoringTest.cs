@@ -574,41 +574,41 @@ namespace Com.DanLiris.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTests
         //    Assert.IsType<System.IO.MemoryStream>(Response1);
         //}
 
-        //[Fact]
-        //public async Task Should_Success_Get_Report_Data()
-        //{
-        //    GarmentDeliveryOrderFacade facade = new GarmentDeliveryOrderFacade(GetServiceProvider().Object, _dbContext(GetCurrentMethod()));
-        //    var model = await dataUtil(facade, GetCurrentMethod()).GetTestData();
-        //    var Response = facade.GetReportDO(model.DONo, "", model.SupplierId, null, null, 1, 25, "{}", 7);
-        //    Assert.NotEqual(-1, Response.Item2);
-        //}
+        [Fact]
+        public async Task Should_Success_Get_Report_Data()
+        {
+            GarmentDeliveryOrderFacade facade = new GarmentDeliveryOrderFacade(GetServiceProvider().Object, _dbContext(GetCurrentMethod()));
+            var model = await dataUtil(facade, GetCurrentMethod()).GetTestData();
+            var Response = facade.GetReportDO(model.DONo, "", model.SupplierId, null, null, 1, 25, "{}", 7);
+            Assert.NotEqual(-1, Response.Item2);
+        }
 
-        //[Fact]
-        //public async Task Should_Success_Get_Report_Data_Null_Parameter()
-        //{
-        //    GarmentDeliveryOrderFacade facade = new GarmentDeliveryOrderFacade(GetServiceProvider().Object, _dbContext(GetCurrentMethod()));
-        //    var model = await dataUtil(facade, GetCurrentMethod()).GetTestData();
-        //    var Response = facade.GetReportDO("", "", 0, null, null, 1, 25, "{}", 7);
-        //    Assert.NotEmpty(Response.Item1);
-        //}
+        [Fact]
+        public async Task Should_Success_Get_Report_Data_Null_Parameter()
+        {
+            GarmentDeliveryOrderFacade facade = new GarmentDeliveryOrderFacade(GetServiceProvider().Object, _dbContext(GetCurrentMethod()));
+            var model = await dataUtil(facade, GetCurrentMethod()).GetTestData();
+            var Response = facade.GetReportDO("", "", 0, null, null, 1, 25, "{}", 7);
+            Assert.NotEmpty(Response.Item1);
+        }
 
-        //[Fact]
-        //public async Task Should_Success_Get_Report_Data_Excel()
-        //{
-        //    GarmentDeliveryOrderFacade facade = new GarmentDeliveryOrderFacade(GetServiceProvider().Object, _dbContext(GetCurrentMethod()));
-        //    var model = await dataUtil(facade, GetCurrentMethod()).GetTestData();
-        //    var Response = facade.GenerateExcelDO(model.DONo, "", model.SupplierId, null, null, 7);
-        //    Assert.IsType<System.IO.MemoryStream>(Response);
-        //}
+        [Fact]
+        public async Task Should_Success_Get_Report_Data_Excel()
+        {
+            GarmentDeliveryOrderFacade facade = new GarmentDeliveryOrderFacade(GetServiceProvider().Object, _dbContext(GetCurrentMethod()));
+            var model = await dataUtil(facade, GetCurrentMethod()).GetTestData();
+            var Response = facade.GenerateExcelDO(model.DONo, "", model.SupplierId, null, null, 7);
+            Assert.IsType<System.IO.MemoryStream>(Response);
+        }
 
-        //[Fact]
-        //public async Task Should_Success_Get_Report_Data_Excel_Null_parameter()
-        //{
-        //    GarmentDeliveryOrderFacade facade = new GarmentDeliveryOrderFacade(GetServiceProvider().Object, _dbContext(GetCurrentMethod()));
-        //    var model = await dataUtil(facade, GetCurrentMethod()).GetTestData();
-        //    var Response = facade.GenerateExcelDO("", "", 0, null, null, 7);
-        //    Assert.IsType<System.IO.MemoryStream>(Response);
-        //}
+        [Fact]
+        public async Task Should_Success_Get_Report_Data_Excel_Null_parameter()
+        {
+            GarmentDeliveryOrderFacade facade = new GarmentDeliveryOrderFacade(GetServiceProvider().Object, _dbContext(GetCurrentMethod()));
+            var model = await dataUtil(facade, GetCurrentMethod()).GetTestData();
+            var Response = facade.GenerateExcelDO("", "", 0, null, null, 7);
+            Assert.IsType<System.IO.MemoryStream>(Response);
+        }
         // Buku Harian Pembelian
         //[Fact]
         //public async Task Should_Success_Get_Buku_Sub_Beli_Data()
@@ -854,7 +854,7 @@ namespace Com.DanLiris.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTests
         //    var Response = DataSJ.GenerateExcelGDailyPurchasingReport(null, true, null, null, null, null, 7);
         //    Assert.IsType<System.IO.MemoryStream>(Response);
         //}
-       
+
         //[Fact]
         //public async Task Should_Success_Get_Buku_Sub_Beli_Excel_Null_Parameter()
         //{

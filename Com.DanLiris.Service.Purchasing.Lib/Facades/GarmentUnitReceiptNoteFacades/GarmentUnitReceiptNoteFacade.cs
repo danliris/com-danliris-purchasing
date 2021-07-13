@@ -1803,62 +1803,38 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFaca
             var categories = GetProductCodes(1, int.MaxValue, "{}", "{}");
 
             var categories1 = type == "FABRIC" ? categories.Where(x => x.CodeRequirement == "BB").Select(x => x.Name).ToArray() : type == "NON FABRIC" ? categories.Where(x => coderequirement.Contains(x.CodeRequirement)).Select(x => x.Name).ToArray() : categories.Select(x=>x.Name).ToArray();
-            var Data1 = from a in dbContext.GarmentUnitReceiptNotes
-                        join b in dbContext.GarmentUnitReceiptNoteItems on a.Id equals b.URNId
+            var Data1 = from a in (from aa in dbContext.GarmentUnitReceiptNoteItems select aa)
+                        join b in dbContext.GarmentUnitReceiptNotes on a.URNId equals b.Id
+                        join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on a.EPOItemId equals c.Id
+                        join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
+                        join e in (from gg in dbContext.GarmentPurchaseRequests where gg.IsDeleted == false select gg) on a.RONo equals e.RONo
                         where a.IsDeleted == false && b.IsDeleted == false
                         //&& (type == "FABRIC" ? b.ProductName == "FABRIC" : type == "NON FABRIC" ? b.ProductName != "FABRIC" : b.ProductName == b.ProductName)
-                        && (type == "FABRIC" ? categories1.Contains(b.ProductName) : type == "NON FABRIC" ? categories1.Contains(b.ProductName) : categories1.Contains(b.ProductName))
-                        && b.ProductName != "PROCESS"
-                        && a.CreatedUtc.Date >= DateFrom.Date
-                        && a.CreatedUtc.Date <= DateTo.Date
-                        && a.UId == null
+                        && categories1.Contains(a.ProductName)
+                        && a.ProductName != "PROCESS"
+                        && b.CreatedUtc.Date >= DateFrom.Date
+                        && b.CreatedUtc.Date <= DateTo.Date
                         select new GarmentUnitReceiptNoteINReportViewModel
                         {
-                            NoSuratJalan = a.DONo,
-                            NoBUM = a.URNNo,
-                            UNit = a.UnitName,
-                            TanggalMasuk = a.ReceiptDate,
-                            TanggalBuatBon = a.CreatedUtc,
-                            Gudang = a.StorageName,
-                            AsalTerima = a.URNType,
-                            NoPO = b.POSerialNumber,
-                            Keterangan = b.ProductRemark,
-                            NoRO = b.RONo,
-                            JumlahDiterima = Convert.ToDouble(b.ReceiptQuantity),
-                            Satuan = b.UomUnit,
-                            JumlahKecil = Convert.ToDouble(b.SmallQuantity),
-                            NamaBarang = b.ProductName,
-                            KodeBarang = b.ProductCode,
-                            Supplier = a.SupplierName
+                            NoSuratJalan = b.DONo,
+                            NoBUM = b.URNNo,
+                            UNit = b.UnitName,
+                            TanggalMasuk = b.ReceiptDate,
+                            TanggalBuatBon = b.CreatedUtc,
+                            Gudang = b.StorageName,
+                            AsalTerima = b.URNType,
+                            NoPO = a.POSerialNumber,
+                            Keterangan = a.ProductRemark,
+                            NoRO = a.RONo,
+                            JumlahDiterima = Convert.ToDouble(a.ReceiptQuantity),
+                            Satuan = a.UomUnit,
+                            JumlahKecil = Convert.ToDouble(a.ReceiptQuantity * a.Conversion),
+                            NamaBarang = a.ProductName,
+                            KodeBarang = a.ProductCode,
+                            Supplier = b.SupplierName
                         };
-            var Data2 = from a in dbContext.GarmentUnitReceiptNotes
-                        join b in dbContext.GarmentUnitReceiptNoteItems on a.Id equals b.URNId
-                        where a.IsDeleted == false && b.IsDeleted == false
-                        && (type == "FABRIC" ? categories1.Contains(b.ProductName) : type == "NON FABRIC" ? categories1.Contains(b.ProductName) : categories1.Contains(b.ProductName))
-                        && b.ProductName != "PROCESS"
-                        && a.LastModifiedUtc.Date >= DateFrom.Date
-                        && a.LastModifiedUtc.Date <= DateTo.Date
-                        && a.UId != null
-                        select new GarmentUnitReceiptNoteINReportViewModel
-                        {
-                            NoSuratJalan = a.DONo,
-                            NoBUM = a.URNNo,
-                            UNit = a.UnitName,
-                            TanggalMasuk = a.ReceiptDate,
-                            TanggalBuatBon = a.CreatedUtc,
-                            Gudang = a.StorageName,
-                            AsalTerima = a.URNType,
-                            NoPO = b.POSerialNumber,
-                            Keterangan = b.ProductRemark,
-                            NoRO = b.RONo,
-                            JumlahDiterima = Convert.ToDouble(b.ReceiptQuantity),
-                            Satuan = b.UomUnit,
-                            JumlahKecil = Convert.ToDouble(b.SmallQuantity),
-                            NamaBarang = b.ProductName,
-                            KodeBarang = b.ProductCode,
-                            Supplier = a.SupplierName
-                        };
-            var Query = Data1.Union(Data2);
+            Data1 = Data1.Where(x => (x.KodeBarang != "APL001") && (x.KodeBarang != "EMB001") && (x.KodeBarang != "GMT001") && (x.KodeBarang != "PRN001") && (x.KodeBarang != "SMP001") && (x.KodeBarang != "WSH001"));
+            var Query = Data1;
             //var Query = type == "FABRIC" ? from a in dbContext.GarmentUnitReceiptNotes
             //                               join b in dbContext.GarmentUnitReceiptNoteItems on a.Id equals b.URNId
             //                               where a.IsDeleted == false && b.IsDeleted == false

@@ -40,7 +40,7 @@ namespace Com.DanLiris.Service.Purchasing.Test.DataUtils.GarmentExternalPurchase
                 Shrinkage = "shrink",
                 QualityStandardType = "quality",
                 PieceLength = "piece",
-                PaymentMethod = "pay",
+                PaymentMethod = "CMT",
                 PaymentType = "payType",
                 IncomeTaxId = "1",
                 IncomeTaxName = "income1",
@@ -72,7 +72,7 @@ namespace Com.DanLiris.Service.Purchasing.Test.DataUtils.GarmentExternalPurchase
                         PRId=(int)datas[0].PRId,
                         ProductId = 1,
                         ProductCode = "ProductCode1",
-                        ProductName = "ProductName1",
+                        ProductName = "FABRIC",
 
                         DealQuantity = 5,
                         BudgetPrice = 5,
@@ -88,7 +88,7 @@ namespace Com.DanLiris.Service.Purchasing.Test.DataUtils.GarmentExternalPurchase
 
                         PricePerDealUnit=1,
                         Conversion=1,
-                        RONo=datas[0].RONo,
+                        RONo="RONo123",
 
                         Remark = "ProductRemark",
                         IsOverBudget=true,
@@ -124,7 +124,7 @@ namespace Com.DanLiris.Service.Purchasing.Test.DataUtils.GarmentExternalPurchase
                 Shrinkage = "shrink",
                 QualityStandardType = "quality",
                 PieceLength = "piece",
-                PaymentMethod = "pay",
+                PaymentMethod = "FREE FROM BUYER",
                 PaymentType = "payType",
                 IncomeTaxId = "1",
                 IncomeTaxName = "income1",
@@ -155,7 +155,7 @@ namespace Com.DanLiris.Service.Purchasing.Test.DataUtils.GarmentExternalPurchase
                         PRId=1,
                         ProductId = 1,
                         ProductCode = "ProductCode1",
-                        ProductName = "ProductName1",
+                        ProductName = "FABRIC",
 
                         DealQuantity = 20,
                         BudgetPrice = 5,
@@ -171,7 +171,7 @@ namespace Com.DanLiris.Service.Purchasing.Test.DataUtils.GarmentExternalPurchase
 
                         PricePerDealUnit=1,
                         Conversion=1,
-                        RONo=datas[0].RONo,
+                        RONo="RONo123",
 
                         Remark = "ProductRemark",
                         IsOverBudget=true,

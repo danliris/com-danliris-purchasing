@@ -13,6 +13,8 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Models.GarmentPurchaseRequestModel
         public string PRType { get; set; }
         [MaxLength(255)]
         public string RONo { get; set; }
+        [MaxLength(255)]
+        public string MDStaff { get; set; }
 
         public long SCId { get; set; }
         [MaxLength(255)]

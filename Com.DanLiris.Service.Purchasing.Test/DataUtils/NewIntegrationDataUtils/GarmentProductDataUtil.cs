@@ -43,6 +43,17 @@ namespace Com.DanLiris.Service.Purchasing.Test.DataUtils.NewIntegrationDataUtils
             return result;
         }
 
+        public Dictionary<string, object> GetResultFormatterNullOk()
+        {
+            var data = GetNewData();
+
+            Dictionary<string, object> result =
+                new ResultFormatter("1.0", General.OK_STATUS_CODE, General.OK_MESSAGE)
+                .Ok(null);
+
+            return result;
+        }
+
         public Dictionary<string, object> GetMultipleResultFormatterOk()
         {
             var data = new List<GarmentProductViewModel> { GetNewData(), GetNewDataBP() };
@@ -64,6 +75,13 @@ namespace Com.DanLiris.Service.Purchasing.Test.DataUtils.NewIntegrationDataUtils
         public string GetMultipleResultFormatterOkString()
         {
             var result = GetMultipleResultFormatterOk();
+
+            return JsonConvert.SerializeObject(result);
+        }
+
+        public string GetMultipleResultFormatterNullOkString()
+        {
+            var result = GetResultFormatterNullOk();
 
             return JsonConvert.SerializeObject(result);
         }

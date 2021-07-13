@@ -83,6 +83,7 @@ namespace Com.DanLiris.Service.Purchasing.WebApi.Controllers.v1.GarmentPurchaseR
                         s.Id,
                         s.PRNo,
                         s.RONo,
+                        s.MDStaff,
                         s.Article,
                         s.Date,
                         s.ExpectedDeliveryDate,

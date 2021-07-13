@@ -1639,55 +1639,35 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentUnitExpenditureNote
             var categories1 = type == "FABRIC" ? categories.Where(x => x.CodeRequirement == "BB").Select(x => x.Name).ToArray() : type == "NON FABRIC" ? categories.Where(x => coderequirement.Contains(x.CodeRequirement)).Select(x => x.Name).ToArray() : categories.Select(x => x.Name).ToArray();
             DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : (DateTime)dateFrom;
             DateTime DateTo = dateTo == null ? DateTime.Now : (DateTime)dateTo;
-            var Data1 = from a in dbContext.GarmentUnitExpenditureNotes
-                        join b in dbContext.GarmentUnitExpenditureNoteItems on a.Id equals b.UENId
+            var Data1 = from a in (from aa in dbContext.GarmentUnitExpenditureNoteItems select aa)
+                        join b in dbContext.GarmentUnitExpenditureNotes on a.UENId equals b.Id
+                        join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on a.EPOItemId equals c.Id
+                        join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
+                        //join h in Codes on a.ProductCode equals h.Code
+                        join e in (from gg in dbContext.GarmentPurchaseRequests where gg.IsDeleted == false select gg) on a.RONo equals e.RONo
                         where a.IsDeleted == false && b.IsDeleted == false
                         //&& (type == "FABRIC" ? b.ProductName == "FABRIC" : type == "NON FABRIC" ? b.ProductName != "FABRIC" : b.ProductName == b.ProductName)
-                        && (type == "FABRIC" ? categories1.Contains(b.ProductName) : type == "NON FABRIC" ? categories1.Contains(b.ProductName) : categories1.Contains(b.ProductName))
-                        && b.ProductName != "PROCESS"
-                        && a.CreatedUtc.Date >= DateFrom.Date
-                        && a.CreatedUtc.Date <= DateTo.Date
-                        && a.UId == null
+                        && categories1.Contains(a.ProductName)
+                        && a.ProductName != "PROCESS"
+                        && b.CreatedUtc.Date >= DateFrom.Date
+                        && b.CreatedUtc.Date <= DateTo.Date
                         select new MonitoringOutViewModel
                         {
                             CreatedUtc = a.CreatedUtc,
-                            ExTo = a.ExpenditureType == "EXTERNAL" ? "RETUR KE PEMBELIAN" : a.ExpenditureType,
-                            ItemCode = b.ProductCode,
-                            ItemName = b.ProductName,
-                            PONo = b.POSerialNumber,
-                            Quantity = b.Quantity,
-                            Storage = a.StorageName,
-                            UENNo = a.UENNo,
-                            UnitCode = a.UnitRequestCode,
-                            UnitName = a.UnitRequestName,
-                            UnitQtyName = b.UomUnit,
-                            ExDate = a.ExpenditureDate
+                            ExTo = b.ExpenditureType == "EXTERNAL" ? "RETUR KE PEMBELIAN" : b.ExpenditureType,
+                            ItemCode = a.ProductCode,
+                            ItemName = a.ProductName,
+                            PONo = a.POSerialNumber,
+                            Quantity = Math.Round(a.UomUnit == "YARD" ? (double)a.Quantity * 0.9144 : (double)a.Quantity,2),
+                            Storage = b.StorageName,
+                            UENNo = b.UENNo,
+                            UnitCode = b.UnitRequestCode,
+                            UnitName = b.UnitRequestName,
+                            UnitQtyName = a.UomUnit == "YARD" ? "MT" : a.UomUnit,
+                            ExDate = b.ExpenditureDate
                         };
-            var Data2 = from a in dbContext.GarmentUnitExpenditureNotes
-                        join b in dbContext.GarmentUnitExpenditureNoteItems on a.Id equals b.UENId
-                        where a.IsDeleted == false && b.IsDeleted == false
-                        //&& (type == "FABRIC" ? b.ProductName == "FABRIC" : type == "NON FABRIC" ? b.ProductName != "FABRIC" : b.ProductName == b.ProductName)
-                        && (type == "FABRIC" ? categories1.Contains(b.ProductName) : type == "NON FABRIC" ? categories1.Contains(b.ProductName) : categories1.Contains(b.ProductName))
-                        && b.ProductName != "PROCESS"
-                        && a.LastModifiedUtc.Date >= DateFrom.Date
-                        && a.LastModifiedUtc.Date <= DateTo.Date
-                        && a.UId != null
-                        select new MonitoringOutViewModel
-                        {
-                            CreatedUtc = a.CreatedUtc,
-                            ExTo = a.ExpenditureType == "EXTERNAL" ? "RETUR KE PEMBELIAN" : a.ExpenditureType,
-                            ItemCode = b.ProductCode,
-                            ItemName = b.ProductName,
-                            PONo = b.POSerialNumber,
-                            Quantity = b.Quantity,
-                            Storage = a.StorageName,
-                            UENNo = a.UENNo,
-                            UnitCode = a.UnitRequestCode,
-                            UnitName = a.UnitRequestName,
-                            UnitQtyName = b.UomUnit,
-                            ExDate = a.ExpenditureDate
-                        };
-            var Query = Data1.Union(Data2);
+            Data1 = Data1.Where(x => (x.ItemCode != "APL001") && (x.ItemCode != "EMB001") && (x.ItemCode != "GMT001") && (x.ItemCode != "PRN001") && (x.ItemCode != "SMP001") && (x.ItemCode != "WSH001"));
+            var Query = Data1;
             //var Query = type == "FABRIC" ? from a in dbContext.GarmentUnitExpenditureNotes
             //                               join b in dbContext.GarmentUnitExpenditureNoteItems on a.Id equals b.UENId
             //                               where a.IsDeleted == false && b.IsDeleted == false

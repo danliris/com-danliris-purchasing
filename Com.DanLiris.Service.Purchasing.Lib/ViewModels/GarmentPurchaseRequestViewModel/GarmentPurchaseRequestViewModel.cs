@@ -14,6 +14,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.ViewModels.GarmentPurchaseRequestV
         public string PRNo { get; set; }
         public string PRType { get; set; }
         public string RONo { get; set; }
+        public string MDStaff { get; set; }
 
         public long SCId { get; set; }
         public string SCNo { get; set; }

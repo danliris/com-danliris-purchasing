@@ -13,9 +13,10 @@ using System;
 namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
 {
     [DbContext(typeof(PurchasingDbContext))]
-    partial class PurchasingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210617061016_Add-Coloumn-MDStaff-Garment-Purchase-Request")]
+    partial class AddColoumnMDStaffGarmentPurchaseRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,12 +123,8 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<int>("Month");
-
                     b.Property<string>("Type")
                         .HasMaxLength(25);
-
-                    b.Property<int>("Year");
 
                     b.HasKey("Id");
 
@@ -769,14 +766,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("DeletedUtc");
-
-                    b.Property<string>("DivisionCode")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("DivisionId");
-
-                    b.Property<string>("DivisionName")
-                        .HasMaxLength(128);
 
                     b.Property<string>("IncomeTaxId");
 
@@ -1520,55 +1509,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
                     b.ToTable("GarmentBeacukaiItems");
                 });
 
-            modelBuilder.Entity("Com.DanLiris.Service.Purchasing.Lib.Models.GarmentClosingDateModels.GarmentClosingDate", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Active");
-
-                    b.Property<DateTimeOffset>("CloseDate");
-
-                    b.Property<string>("CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("CreatedUtc");
-
-                    b.Property<string>("DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("DeletedUtc");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<string>("LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("LastModifiedUtc");
-
-                    b.Property<string>("UId")
-                        .HasMaxLength(255);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClosingDate");
-                });
-
             modelBuilder.Entity("Com.DanLiris.Service.Purchasing.Lib.Models.GarmentCorrectionNoteModel.GarmentCorrectionNote", b =>
                 {
                     b.Property<long>("Id")
@@ -1872,8 +1812,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ArrivalDate", "CustomsId", "DOCurrencyId", "DODate", "IncomeTaxId", "SupplierId");
-
                     b.ToTable("GarmentDeliveryOrders");
                 });
 
@@ -1993,8 +1931,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
 
                     b.HasIndex("GarmentDOItemId");
 
-                    b.HasIndex("POId", "PRId", "ProductId");
-
                     b.ToTable("GarmentDeliveryOrderDetails");
                 });
 
@@ -2055,8 +1991,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GarmentDOId");
-
-                    b.HasIndex("CurrencyId", "EPOId", "GarmentDOId");
 
                     b.ToTable("GarmentDeliveryOrderItems");
                 });
@@ -2482,8 +2416,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
                         .IsUnique()
                         .HasFilter("[IsDeleted]=(0) AND [CreatedUtc]>CONVERT([datetime2],'2019-10-01 00:00:00.0000000')");
 
-                    b.HasIndex("CurrencyId", "IncomeTaxId", "SupplierId", "UENId");
-
                     b.ToTable("GarmentExternalPurchaseOrders");
                 });
 
@@ -2606,8 +2538,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GarmentEPOId");
-
-                    b.HasIndex("POId", "PRId");
 
                     b.ToTable("GarmentExternalPurchaseOrderItems");
                 });
@@ -2794,8 +2724,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
 
                     b.HasIndex("GPOId");
 
-                    b.HasIndex("CategoryId", "GPOId", "ProductId");
-
                     b.ToTable("GarmentInternalPurchaseOrderItems");
                 });
 
@@ -2879,8 +2807,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
                     b.HasIndex("INNo")
                         .IsUnique()
                         .HasFilter("[IsDeleted]=(0) AND [CreatedUtc]>CONVERT([datetime2],'2019-10-01 00:00:00.0000000')");
-
-                    b.HasIndex("INDate", "CurrencyId", "CurrencyCode", "SupplierId");
 
                     b.ToTable("GarmentInternNotes");
                 });
@@ -3443,8 +3369,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CurrencyId", "IncomeTaxId", "SupplierId", "InvoiceDate", "IncomeTaxDate");
-
                     b.ToTable("GarmentInvoices");
                 });
 
@@ -3525,8 +3449,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
 
                     b.HasIndex("InvoiceItemId");
 
-                    b.HasIndex("EPOId", "IPOId", "PRItemId", "DODetailId", "ProductId", "UomId");
-
                     b.ToTable("GarmentInvoiceDetails");
                 });
 
@@ -3588,8 +3510,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("InvoiceId");
-
-                    b.HasIndex("ArrivalDate", "DeliveryOrderId", "DeliveryOrderNo", "InvoiceId");
 
                     b.ToTable("GarmentInvoiceItems");
                 });

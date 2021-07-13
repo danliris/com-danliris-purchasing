@@ -2163,7 +2163,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFacade
                              dealQuantity = gdo.dealQuantity,
                              uomUnit = gdo.uomUnit,
                              createdUtc = gdo.createdUtc,
-                             EPOcreatedBy = gdo.createdBy,
+                             EPOcreatedBy = gdo.EPOcreatedBy,
                              INNo = gdo.INNo,
                              TermPayment = gdo.TermPayment,
                              URNType = gdo.URNType,
@@ -2187,7 +2187,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFacade
                     urn.Add(data);
                 }
             }
-            return Query1 = urn.AsQueryable();
+            return Query = urn.AsQueryable();
         }
 
         public Tuple<List<GarmentDeliveryOrderReportViewModel>, int> GetReportDO(string no, string poEksNo, long supplierId, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order, int offset)
