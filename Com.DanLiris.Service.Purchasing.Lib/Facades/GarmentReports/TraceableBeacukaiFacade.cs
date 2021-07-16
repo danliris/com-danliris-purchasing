@@ -970,15 +970,13 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentReports
 
         #endregion
         #region Keluar
-        private List<GarmentExpenditureGoodViewModel> GetRono(int page, int size, string order, string filter)
+        private List<GarmentExpenditureGoodViewModel> GetRono(string invoice)
         {
             IHttpClientService httpClient = (IHttpClientService)serviceProvider.GetService(typeof(IHttpClientService));
+            var param = new StringContent(JsonConvert.SerializeObject(invoice), Encoding.UTF8, "application/json");
+            string shippingInvoiceUri = APIEndpoint.GarmentProduction + $"expenditure-goods/byInvoice";
 
-            string shippingInvoiceUri = APIEndpoint.GarmentProduction + $"expenditure-goods";
-            string queryUri = "?page=" + page + "&size=" + size + "&order=" + order + "&filter=" + filter;
-            string uri = shippingInvoiceUri + queryUri;
-
-            var httpResponse = httpClient.GetAsync(uri).Result;
+            var httpResponse = httpClient.SendAsync(HttpMethod.Get, shippingInvoiceUri, param).Result;
             if (httpResponse.IsSuccessStatusCode)
             {
                 var content = httpResponse.Content.ReadAsStringAsync().Result;
@@ -1001,21 +999,6 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentReports
                 return new List<GarmentExpenditureGoodViewModel>();
             }
 
-            //if (httpClient != null)
-            //{
-            //    var garmentSupplierUri = APIEndpoint.GarmentProduction + $"expenditure-goods";
-            //    string queryUri = "?page=" + page + "&size=" + size + "&order=" + order + "&filter=" + filter;
-            //    string uri = garmentSupplierUri + queryUri;
-            //    var response = httpClient.GetAsync($"{uri}").Result.Content.ReadAsStringAsync();
-            //    Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Result);
-            //    List<GarmentExpenditureGoodViewModel> viewModel = JsonConvert.DeserializeObject<List<GarmentExpenditureGoodViewModel>>(result.GetValueOrDefault("data").ToString());
-            //    return viewModel;
-            //}
-            //else
-            //{
-            //    List<GarmentExpenditureGoodViewModel> viewModel = new List<GarmentExpenditureGoodViewModel>();
-            //    return viewModel;
-            //}
         }
 
         public List<BeacukaiAddedViewModel> GetPEBbyBCNo(string bcno)
@@ -1085,12 +1068,14 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentReports
 
             var PEB = GetPEBbyBCNo(bcno.Trim());
 
-            var filterexpend = new
-            {
-                invoice = PEB.Select(x=>x.BonNo.Trim()).FirstOrDefault()
-            };
+            //var filterexpend = new
+            //{
+            //    invoice = PEB.Select(x=>x.BonNo.Trim()).FirstOrDefault()
+            //};
 
-            var expend = GetRono(1, int.MaxValue, "{}", JsonConvert.SerializeObject(filterexpend));
+            string invoices = string.Join(",", PEB.Select(x => x.BonNo));
+
+            var expend = GetRono(invoices);
 
             var Query = (from a in PEB
                          join b in expend on a.BonNo.Trim() equals b.Invoice.Trim()
@@ -1160,6 +1145,7 @@ namespace Com.DanLiris.Service.Purchasing.Lib.Facades.GarmentReports
                              UnitQtyName = key.UnitQtyName
 
                          }).ToList();
+
 
             foreach(var g in rinciandetil)
             {

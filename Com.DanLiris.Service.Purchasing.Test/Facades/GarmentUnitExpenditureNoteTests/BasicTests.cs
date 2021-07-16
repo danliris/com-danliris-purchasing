@@ -84,6 +84,9 @@ namespace Com.DanLiris.Service.Purchasing.Test.Facades.GarmentUnitExpenditureNot
                 .Setup(x => x.SendAsync(It.IsAny<HttpMethod>(), It.Is<string>(s => s.Contains("expenditure-goods/traceable-by-ro")), It.IsAny<HttpContent>()))
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(new GarmentExpenditureGoodDataUtil().GetMultipleResultFormatterOkString()) });
             httpClientService
+                .Setup(x => x.SendAsync(It.IsAny<HttpMethod>(), It.Is<string>(s => s.Contains("expenditure-goods/byInvoice")), It.IsAny<HttpContent>()))
+                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(new GarmentExpenditureGoodDataUtil().GetMultipleResultFormatterOkString()) });
+            httpClientService
                 .Setup(x => x.PostAsync(It.Is<string>(s => s.Contains("garment-debt-balances/customs")), It.IsAny<HttpContent>()))
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.Created));
             httpClientService
@@ -1577,8 +1580,8 @@ namespace Com.DanLiris.Service.Purchasing.Test.Facades.GarmentUnitExpenditureNot
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.InternalServerError));
 
             httpClientService
-                .Setup(x => x.GetAsync(It.Is<string>(s => s.Contains("expenditure-goods"))))
-                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+                 .Setup(x => x.SendAsync(It.IsAny<HttpMethod>(), It.Is<string>(s => s.Contains("expenditure-goods/byInvoice")), It.IsAny<HttpContent>()))
+                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.InternalServerError));
 
             httpClientService
                 .Setup(x => x.GetAsync(It.Is<string>(s => s.Contains("master/garment-suppliers"))))
@@ -1680,9 +1683,8 @@ namespace Com.DanLiris.Service.Purchasing.Test.Facades.GarmentUnitExpenditureNot
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(new BeacukaiAddedDataUtil().GetNullFormatterOkString()) });
 
             httpClientService
-                .Setup(x => x.GetAsync(It.Is<string>(s => s.Contains("expenditure-goods"))))
-                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(new GarmentExpenditureGoodDataUtil().GetNullFormatterOkString()) });
-
+                 .Setup(x => x.SendAsync(It.IsAny<HttpMethod>(), It.Is<string>(s => s.Contains("expenditure-goods/byInvoice")), It.IsAny<HttpContent>()))
+                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(new GarmentExpenditureGoodDataUtil().GetNullFormatterOkString()) });
             httpClientService
                 .Setup(x => x.GetAsync(It.Is<string>(s => s.Contains("master/garment-suppliers"))))
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(new SupplierDataUtil().GetResultFormatterOkString()) });
